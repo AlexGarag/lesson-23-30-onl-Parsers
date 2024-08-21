@@ -1,0 +1,12 @@
+<users>
+    <user>
+        <id>1</id>
+        <name>alex</name>
+        <surname>garag</surname>
+    </user>
+    <user>
+        <id>2</id>
+        <name>alex2</name>
+        <surname>garag2</surname>
+    </user>
+</users>

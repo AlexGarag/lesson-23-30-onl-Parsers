@@ -27,8 +27,6 @@ public class SolverTask1 {
         doc.getDocumentElement().normalize();
 
         Node rootNode = doc.getFirstChild();
-//        Node lines = null;
-//        Node author = null;
         NodeList rootChildren = rootNode.getChildNodes();
         SonnetModel sonnetModel = new SonnetModel();
         AuthorModel authorModel = new AuthorModel();

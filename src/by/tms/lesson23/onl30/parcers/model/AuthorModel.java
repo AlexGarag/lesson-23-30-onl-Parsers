@@ -1,6 +1,6 @@
 package by.tms.lesson23.onl30.parcers.model;
 
-public class Author {
+public class AuthorModel {
     private String firstName;
     private String lastName;
     private String nationality;
@@ -25,6 +25,26 @@ public class Author {
 
     public int getYearOfDeath() {
         return yearOfDeath;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public void setYearOfBirth(int yearOfBirth) {
+        this.yearOfBirth = yearOfBirth;
+    }
+
+    public void setYearOfDeath(int yearOfDeath) {
+        this.yearOfDeath = yearOfDeath;
     }
 
     @Override

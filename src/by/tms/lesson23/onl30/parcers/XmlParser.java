@@ -1,7 +1,7 @@
 package by.tms.lesson23.onl30.parcers;
 
-import by.tms.lesson23.onl30.parcers.model.AuthorModel;
-import by.tms.lesson23.onl30.parcers.model.SonnetModel;
+import by.tms.lesson23.onl30.parcers.model.Author;
+import by.tms.lesson23.onl30.parcers.model.Sonnet;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -12,10 +12,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SolverTask1 {
+public class XmlParser {
     public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
 
 //        Написать программу для парсинга xml документа. Необходимо распарсить xml документ и
@@ -25,17 +29,16 @@ public class SolverTask1 {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = builder.parse(new File("text.xml"));
         doc.getDocumentElement().normalize();
-
+// todo вынести алгоритм парсера в отдельный метод (м.б. сделать через стрим?)
         Node rootNode = doc.getFirstChild();
         NodeList rootChildren = rootNode.getChildNodes();
-        SonnetModel sonnetModel = new SonnetModel();
-        AuthorModel authorModel = new AuthorModel();
-
+        Sonnet sonnet = new Sonnet();
+        Author author = new Author();
+        sonnet.setType(rootNode.getAttributes().item(0).getNodeValue());
         for (int i = 0; i < rootChildren.getLength(); i++) {
             if (rootChildren.item(i).getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
-            System.out.println(rootChildren.item(i).getNodeName());
             switch (rootChildren.item(i).getNodeName()) {
                 case "author":
                     NodeList authorChildren = rootChildren.item(i).getChildNodes();
@@ -45,26 +48,26 @@ public class SolverTask1 {
                         }
                         switch (authorChildren.item(k).getNodeName()) {
                             case "lastName":
-                                authorModel.setLastName(authorChildren.item(k).getTextContent());
+                                author.setLastName(authorChildren.item(k).getTextContent());
                                 break;
                             case "firstName":
-                                authorModel.setFirstName(authorChildren.item(k).getTextContent());
+                                author.setFirstName(authorChildren.item(k).getTextContent());
                                 break;
                             case "nationality":
-                                authorModel.setNationality(authorChildren.item(k).getTextContent());
+                                author.setNationality(authorChildren.item(k).getTextContent());
                                 break;
                             case "yearOfBirth":
-                                authorModel.setYearOfBirth(Integer.valueOf(authorChildren.item(k).getTextContent()));
+                                author.setYearOfBirth(Integer.valueOf(authorChildren.item(k).getTextContent()));
                                 break;
                             case "yearOfDeath":
-                                authorModel.setYearOfDeath(Integer.valueOf(authorChildren.item(k).getTextContent()));
+                                author.setYearOfDeath(Integer.valueOf(authorChildren.item(k).getTextContent()));
                                 break;
                         }
                     }
-                    sonnetModel.setAuthor(authorModel);
+                    sonnet.setAuthor(author);
                     break;
                 case "title":
-                    sonnetModel.setTitle(rootChildren.item(i).getTextContent());
+                    sonnet.setTitle(rootChildren.item(i).getTextContent());
                     break;
                 case "lines":
                     List<String> sonnetLines = new ArrayList<>();
@@ -75,11 +78,25 @@ public class SolverTask1 {
                         }
                         sonnetLines.add(linesChildren.item(k).getTextContent());
                     }
-                    sonnetModel.setLines(sonnetLines);
+                    sonnet.setLines(sonnetLines);
                     break;
             }
         }
+// todo вынести работу с файлом в отдельный метод с созданием своего потока
+        StringBuilder sonnetText = new StringBuilder();
+        for (String line : sonnet.getLines()) {
+            sonnetText.append(line).append("\n");
+        }
+        StringBuilder nameFileSonnet = new StringBuilder();
+        nameFileSonnet.append(sonnet.getAuthor().getFirstName()).append("_")
+                .append(sonnet.getAuthor().getLastName()).append("_")
+                .append(sonnet.getTitle()).append(".txt");
 
-        int i = 0;
+        Path path = Paths.get(nameFileSonnet.toString());
+        try {
+            Files.writeString(path, sonnetText, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 }

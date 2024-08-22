@@ -2,17 +2,17 @@ package by.tms.lesson23.onl30.parcers.model;
 
 import java.util.List;
 
-public class SonnetModel {
-//    private String type;
-    private AuthorModel author;
+public class Sonnet {
+    private String type;
+    private Author author;
     private String title;
     private List<String> lines;
 
-//    public String getType() {
-//        return type;
-//    }
+    public String getType() {
+        return type;
+    }
 
-    public AuthorModel getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
@@ -24,7 +24,11 @@ public class SonnetModel {
         return lines;
     }
 
-    public void setAuthor(AuthorModel author) {
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setAuthor(Author author) {
         this.author = author;
     }
 
@@ -39,7 +43,7 @@ public class SonnetModel {
     @Override
     public String toString() {
         return "Sonnet{" +
-//                "type='" + type + '\'' +
+                "type='" + type + '\'' +
                 ", author=" + author +
                 ", title='" + title + '\'' +
                 ", lines=" + lines +

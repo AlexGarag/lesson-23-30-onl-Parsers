@@ -1,6 +1,6 @@
 package by.tms.lesson23.onl30.parcers.model;
 
-public class AuthorModel {
+public class Author {
     private String firstName;
     private String lastName;
     private String nationality;

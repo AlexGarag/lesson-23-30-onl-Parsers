@@ -32,6 +32,7 @@ public class XmlParser {
 // todo вынести алгоритм парсера в отдельный метод (м.б. сделать через стрим?)
         Node rootNode = doc.getFirstChild();
         NodeList rootChildren = rootNode.getChildNodes();
+// todo сделать record?
         Sonnet sonnet = new Sonnet();
         Author author = new Author();
         sonnet.setType(rootNode.getAttributes().item(0).getNodeValue());

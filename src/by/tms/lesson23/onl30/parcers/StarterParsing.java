@@ -23,6 +23,7 @@ public class StarterParsing {
         Sonnet sonnet;
         try {
             sonnet = doXmlParsing(new File("text.xml"));
+// todo вынести работу с файлом в отдельный метод с созданием своего потока
             Files.writeString(getPath(sonnet), getText(sonnet), StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("The problem with the file being processed");

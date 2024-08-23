@@ -12,97 +12,80 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class XmlParser {
 
-    public static Sonnet doXmlParsing(File file) throws IOException, SAXException, ParserConfigurationException {
-        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = builder.parse(file);
-        document.getDocumentElement().normalize();
-
-        // todo вынести алгоритм парсера в отдельный метод (м.б. сделать через стрим?)
-        Node rootNode = document.getFirstChild();
-        NodeList rootChildren = rootNode.getChildNodes();
-        // todo сделать record?
+    public static Sonnet doXmlParsing(File file) throws IOException, ParserConfigurationException, SAXException {
+        Node rootNode = getRootNode(file);
+        NodeList sonnetContent = rootNode.getChildNodes();
+        // todo сделать record???
         Sonnet sonnet = new Sonnet();
-        Author author = new Author();
-        sonnet.setType(rootNode.getAttributes()
-                .item(0)
-                .getNodeValue());
-        for (
-                int i = 0; i < rootChildren.getLength(); i++) {
-            if (rootChildren.item(i).getNodeType() != Node.ELEMENT_NODE) {
+        sonnet.setType(rootNode.getAttributes().item(0).getNodeValue());
+        for (int i = 0; i < sonnetContent.getLength(); i++) {
+            if (sonnetContent.item(i).getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
-            switch (rootChildren.item(i).getNodeName()) {
+            switch (sonnetContent.item(i).getNodeName()) {
                 case "author":
-                    NodeList authorChildren = rootChildren.item(i).getChildNodes();
-                    for (int k = 0; k < authorChildren.getLength(); k++) {
-                        if (authorChildren.item(k).getNodeType() != Node.ELEMENT_NODE) {
-                            continue;
-                        }
-                        switch (authorChildren.item(k).getNodeName()) {
-                            case "lastName":
-                                author.setLastName(authorChildren.item(k).getTextContent());
-                                break;
-                            case "firstName":
-                                author.setFirstName(authorChildren.item(k).getTextContent());
-                                break;
-                            case "nationality":
-                                author.setNationality(authorChildren.item(k).getTextContent());
-                                break;
-                            case "yearOfBirth":
-                                author.setYearOfBirth(Integer.valueOf(authorChildren.item(k).getTextContent()));
-                                break;
-                            case "yearOfDeath":
-                                author.setYearOfDeath(Integer.valueOf(authorChildren.item(k).getTextContent()));
-                                break;
-                        }
-                    }
-                    sonnet.setAuthor(author);
+                    NodeList author = sonnetContent.item(i).getChildNodes();
+                    sonnet.setAuthor(getAuthor(author));
                     break;
                 case "title":
-                    sonnet.setTitle(rootChildren.item(i).getTextContent());
+                    String title = sonnetContent.item(i).getTextContent();
+                    sonnet.setTitle(title);
                     break;
                 case "lines":
-                    List<String> sonnetLines = new ArrayList<>();
-                    NodeList linesChildren = rootChildren.item(i).getChildNodes();
-                    for (int k = 0; k < linesChildren.getLength(); k++) {
-                        if (linesChildren.item(k).getNodeType() != Node.ELEMENT_NODE) {
-                            continue;
-                        }
-                        sonnetLines.add(linesChildren.item(k).getTextContent());
-                    }
-                    sonnet.setLines(sonnetLines);
+                    NodeList textContent = sonnetContent.item(i).getChildNodes();
+                    sonnet.setLines(getTextContent(textContent));
                     break;
             }
         }
-
-        // todo вынести работу с файлом в отдельный метод с созданием своего потока
-
-return sonnet;
-//        Files.writeString(getPath(sonnet), getText(sonnet), StandardCharsets.UTF_8);
+        return sonnet;
     }
-//
-//    private static Path getPath(Sonnet sonnet) {
-//        String nameFileSonnet = sonnet.getAuthor().getFirstName() + "_" +
-//                sonnet.getAuthor().getLastName() + "_" +
-//                sonnet.getTitle() + ".txt";
-//
-//        return Paths.get(nameFileSonnet);
-//    }
-//
-//    private static String getText(Sonnet sonnet) {
-//        StringBuilder sonnetText = new StringBuilder();
-//        for (String line : sonnet.getLines()) {
-//            sonnetText.append(line).append("\n");
-//        }
-//        return sonnetText.toString();
-//    }
+
+    private static Node getRootNode(File file) throws ParserConfigurationException, IOException, SAXException {
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document document = builder.parse(file);
+        return document.getDocumentElement();
+    }
+
+    private static Author getAuthor(NodeList nodeAuthor) {
+        Author author = new Author();
+        for (int k = 0; k < nodeAuthor.getLength(); k++) {
+            if (nodeAuthor.item(k).getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+            switch (nodeAuthor.item(k).getNodeName()) {
+                case "lastName":
+                    author.setLastName(nodeAuthor.item(k).getTextContent());
+                    break;
+                case "firstName":
+                    author.setFirstName(nodeAuthor.item(k).getTextContent());
+                    break;
+                case "nationality":
+                    author.setNationality(nodeAuthor.item(k).getTextContent());
+                    break;
+                case "yearOfBirth":
+                    author.setYearOfBirth(Integer.valueOf(nodeAuthor.item(k).getTextContent()));
+                    break;
+                case "yearOfDeath":
+                    author.setYearOfDeath(Integer.valueOf(nodeAuthor.item(k).getTextContent()));
+                    break;
+            }
+        }
+        return author;
+    }
+
+    private static List<String> getTextContent(NodeList textContent) {
+        List<String> sonnetLines = new ArrayList<>();
+        for (int k = 0; k < textContent.getLength(); k++) {
+            if (textContent.item(k).getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+            sonnetLines.add(textContent.item(k).getTextContent());
+        }
+        return sonnetLines;
+    }
 }

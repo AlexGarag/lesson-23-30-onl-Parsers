@@ -16,7 +16,7 @@ public class ServantParsing {
 
     public static String getText(Sonnet sonnet) {
         StringBuilder text = new StringBuilder();
-        for (String line : sonnet.getLines()) {
+        for (String line : sonnet.getText()) {
             text.append(line).append("\n");
         }
         return text.toString();

@@ -14,6 +14,8 @@ import static by.tms.lesson23.onl30.services.ServantParsing.getPath;
 import static by.tms.lesson23.onl30.services.ServantParsing.getText;
 
 public class StarterParsing {
+    static final String IO_ERROR_MESSAGE = "The problem with the file being processed";
+
     public static void main(String[] args) throws SAXException, ParserConfigurationException {
 
 //        Написать программу для парсинга xml документа. Необходимо распарсить xml документ и
@@ -26,7 +28,7 @@ public class StarterParsing {
 // todo вынести работу с файлом в отдельный метод с созданием своего потока
             Files.writeString(getPath(sonnet), getText(sonnet), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            System.out.println("The problem with the file being processed");
+            System.out.println(IO_ERROR_MESSAGE);
         }
 
     }

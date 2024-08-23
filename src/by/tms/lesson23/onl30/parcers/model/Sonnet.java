@@ -6,7 +6,7 @@ public class Sonnet {
     private String type;
     private Author author;
     private String title;
-    private List<String> lines;
+    private List<String> text;
 
     public String getType() {
         return type;
@@ -20,8 +20,8 @@ public class Sonnet {
         return title;
     }
 
-    public List<String> getLines() {
-        return lines;
+    public List<String> getText() {
+        return text;
     }
 
     public void setType(String type) {
@@ -36,8 +36,8 @@ public class Sonnet {
         this.title = title;
     }
 
-    public void setLines(List<String> lines) {
-        this.lines = lines;
+    public void setText(List<String> text) {
+        this.text = text;
     }
 
     @Override
@@ -46,6 +46,6 @@ public class Sonnet {
                 "type='" + type + '\'' +
                 ", author=" + author +
                 ", title='" + title + '\'' +
-                ", lines=" + lines + '}';
+                ", text=" + text + '}';
     }
 }

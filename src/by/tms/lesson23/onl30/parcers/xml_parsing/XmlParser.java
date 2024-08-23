@@ -16,6 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XmlParser {
+    static final String AUTHOR = "author";
+    static final String TITLE = "title";
+    static final String TEXT = "lines";
+    static final String LAST_NAME = "lastName";
+    static final String FIRST_NAME = "firstName";
+    static final String NATIONALITY = "nationality";
+    static final String YEAR_OF_BIRTH = "yearOfBirth";
+    static final String YEAR_OF_DEATH = "yearOfDeath";
 
     public static Sonnet doXmlParsing(File file) throws IOException, ParserConfigurationException, SAXException {
         Node rootNode = getRootNode(file);
@@ -28,17 +36,17 @@ public class XmlParser {
                 continue;
             }
             switch (sonnetContent.item(i).getNodeName()) {
-                case "author":
+                case AUTHOR:
                     NodeList author = sonnetContent.item(i).getChildNodes();
                     sonnet.setAuthor(getAuthor(author));
                     break;
-                case "title":
+                case TITLE:
                     String title = sonnetContent.item(i).getTextContent();
                     sonnet.setTitle(title);
                     break;
-                case "lines":
+                case TEXT:
                     NodeList textContent = sonnetContent.item(i).getChildNodes();
-                    sonnet.setLines(getTextContent(textContent));
+                    sonnet.setText(getTextContent(textContent));
                     break;
             }
         }
@@ -58,19 +66,19 @@ public class XmlParser {
                 continue;
             }
             switch (nodeAuthor.item(k).getNodeName()) {
-                case "lastName":
+                case LAST_NAME:
                     author.setLastName(nodeAuthor.item(k).getTextContent());
                     break;
-                case "firstName":
+                case FIRST_NAME:
                     author.setFirstName(nodeAuthor.item(k).getTextContent());
                     break;
-                case "nationality":
+                case NATIONALITY:
                     author.setNationality(nodeAuthor.item(k).getTextContent());
                     break;
-                case "yearOfBirth":
+                case YEAR_OF_BIRTH:
                     author.setYearOfBirth(Integer.valueOf(nodeAuthor.item(k).getTextContent()));
                     break;
-                case "yearOfDeath":
+                case YEAR_OF_DEATH:
                     author.setYearOfDeath(Integer.valueOf(nodeAuthor.item(k).getTextContent()));
                     break;
             }

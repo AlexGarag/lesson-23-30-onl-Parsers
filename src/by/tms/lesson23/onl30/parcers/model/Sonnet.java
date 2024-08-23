@@ -46,7 +46,6 @@ public class Sonnet {
                 "type='" + type + '\'' +
                 ", author=" + author +
                 ", title='" + title + '\'' +
-                ", lines=" + lines +
-                '}';
+                ", lines=" + lines + '}';
     }
 }

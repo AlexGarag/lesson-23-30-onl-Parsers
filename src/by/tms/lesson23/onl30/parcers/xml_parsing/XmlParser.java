@@ -1,4 +1,4 @@
-package by.tms.lesson23.onl30.parcers;
+package by.tms.lesson23.onl30.parcers.xml_parsing;
 
 import by.tms.lesson23.onl30.parcers.model.Author;
 import by.tms.lesson23.onl30.parcers.model.Sonnet;
@@ -20,23 +20,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XmlParser {
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
 
-//        Написать программу для парсинга xml документа. Необходимо распарсить xml документ и
-//        содержимое тегов line записать в другой документ. Название файла для записи должно
-//        состоять из значений тегов и имеет вид: <firstName>_<lastName>_<title>.txt
-
+    public static void doXmlParsing(File file) throws IOException, SAXException, ParserConfigurationException {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = builder.parse(new File("text.xml"));
-        doc.getDocumentElement().normalize();
-// todo вынести алгоритм парсера в отдельный метод (м.б. сделать через стрим?)
+        doc.getDocumentElement().
+
+                normalize();
+
+        // todo вынести алгоритм парсера в отдельный метод (м.б. сделать через стрим?)
         Node rootNode = doc.getFirstChild();
         NodeList rootChildren = rootNode.getChildNodes();
-// todo сделать record?
+        // todo сделать record?
         Sonnet sonnet = new Sonnet();
         Author author = new Author();
-        sonnet.setType(rootNode.getAttributes().item(0).getNodeValue());
-        for (int i = 0; i < rootChildren.getLength(); i++) {
+        sonnet.setType(rootNode.getAttributes().
+
+                item(0).
+
+                getNodeValue());
+        for (
+                int i = 0; i < rootChildren.getLength(); i++) {
             if (rootChildren.item(i).getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
@@ -83,20 +87,38 @@ public class XmlParser {
                     break;
             }
         }
-// todo вынести работу с файлом в отдельный метод с созданием своего потока
+
+        // todo вынести работу с файлом в отдельный метод с созданием своего потока
         StringBuilder sonnetText = new StringBuilder();
-        for (String line : sonnet.getLines()) {
+        for (
+                String line : sonnet.getLines()) {
             sonnetText.append(line).append("\n");
         }
+
         StringBuilder nameFileSonnet = new StringBuilder();
-        nameFileSonnet.append(sonnet.getAuthor().getFirstName()).append("_")
-                .append(sonnet.getAuthor().getLastName()).append("_")
-                .append(sonnet.getTitle()).append(".txt");
+        nameFileSonnet.append(sonnet.getAuthor().
+
+                        getFirstName()).
+
+                append("_")
+                        .
+
+                append(sonnet.getAuthor().
+
+                        getLastName()).
+
+                append("_")
+                        .
+
+                append(sonnet.getTitle()).
+
+                append(".txt");
 
         Path path = Paths.get(nameFileSonnet.toString());
         try {
             Files.writeString(path, sonnetText, StandardCharsets.UTF_8);
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
             throw new IOException(e.getMessage());
         }
     }

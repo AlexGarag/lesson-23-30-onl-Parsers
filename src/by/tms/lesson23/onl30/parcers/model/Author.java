@@ -54,7 +54,6 @@ public class Author {
                 ", lastName='" + lastName + '\'' +
                 ", nationality='" + nationality + '\'' +
                 ", yearOfBirth=" + yearOfBirth +
-                ", yearOfDeath=" + yearOfDeath +
-                '}';
+                ", yearOfDeath=" + yearOfDeath + '}';
     }
 }

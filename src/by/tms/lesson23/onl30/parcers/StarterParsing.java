@@ -9,12 +9,17 @@ import java.io.IOException;
 import static by.tms.lesson23.onl30.parcers.xml_parsing.XmlParser.doXmlParsing;
 
 public class StarterParsing {
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
+    public static void main(String[] args) throws SAXException, ParserConfigurationException {
 
 //        Написать программу для парсинга xml документа. Необходимо распарсить xml документ и
 //        содержимое тегов line записать в другой документ. Название файла для записи должно
 //        состоять из значений тегов и имеет вид: <firstName>_<lastName>_<title>.txt
 
-        doXmlParsing(new File("text.xml"));
+        try {
+            doXmlParsing(new File("text.xml"));
+        } catch (IOException e) {
+            System.out.println("The problem with the file being processed");
+        }
+
     }
 }

@@ -23,10 +23,8 @@ public class XmlParser {
 
     public static void doXmlParsing(File file) throws IOException, SAXException, ParserConfigurationException {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document doc = builder.parse(new File("text.xml"));
-        doc.getDocumentElement().
-
-                normalize();
+        Document doc = builder.parse(file);
+        doc.getDocumentElement().normalize();
 
         // todo вынести алгоритм парсера в отдельный метод (м.б. сделать через стрим?)
         Node rootNode = doc.getFirstChild();

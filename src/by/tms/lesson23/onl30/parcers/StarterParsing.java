@@ -15,8 +15,9 @@ import static by.tms.lesson23.onl30.services.ServantParsing.getText;
 
 public class StarterParsing {
     static final String IO_ERROR_MESSAGE = "The problem with the file being processed";
+    static final String PARSING_ERROR_MESSAGE = "The parsing process has failed";
 
-    public static void main(String[] args) throws SAXException, ParserConfigurationException {
+    public static void main(String[] args) {
 
 //        Написать программу для парсинга xml документа. Необходимо распарсить xml документ и
 //        содержимое тегов line записать в другой документ. Название файла для записи должно
@@ -25,10 +26,18 @@ public class StarterParsing {
         Sonnet sonnet;
         try {
             sonnet = doXmlParsing(new File("text.xml"));
-// todo вынести работу с файлом в отдельный метод с созданием своего потока
-            Files.writeString(getPath(sonnet), getText(sonnet), StandardCharsets.UTF_8);
+            Thread doFile = new Thread(() -> {
+                try {
+                    Files.writeString(getPath(sonnet), getText(sonnet), StandardCharsets.UTF_8);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            doFile.start();
         } catch (IOException e) {
             System.out.println(IO_ERROR_MESSAGE);
+        } catch (SAXException | ParserConfigurationException e) {
+            System.out.println(PARSING_ERROR_MESSAGE);
         }
 
     }

@@ -21,22 +21,20 @@ import java.util.List;
 
 public class XmlParser {
 
-    public static void doXmlParsing(File file) throws IOException, SAXException, ParserConfigurationException {
+    public static Sonnet doXmlParsing(File file) throws IOException, SAXException, ParserConfigurationException {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document doc = builder.parse(file);
-        doc.getDocumentElement().normalize();
+        Document document = builder.parse(file);
+        document.getDocumentElement().normalize();
 
         // todo вынести алгоритм парсера в отдельный метод (м.б. сделать через стрим?)
-        Node rootNode = doc.getFirstChild();
+        Node rootNode = document.getFirstChild();
         NodeList rootChildren = rootNode.getChildNodes();
         // todo сделать record?
         Sonnet sonnet = new Sonnet();
         Author author = new Author();
-        sonnet.setType(rootNode.getAttributes().
-
-                item(0).
-
-                getNodeValue());
+        sonnet.setType(rootNode.getAttributes()
+                .item(0)
+                .getNodeValue());
         for (
                 int i = 0; i < rootChildren.getLength(); i++) {
             if (rootChildren.item(i).getNodeType() != Node.ELEMENT_NODE) {
@@ -87,37 +85,24 @@ public class XmlParser {
         }
 
         // todo вынести работу с файлом в отдельный метод с созданием своего потока
-        StringBuilder sonnetText = new StringBuilder();
-        for (
-                String line : sonnet.getLines()) {
-            sonnetText.append(line).append("\n");
-        }
 
-        StringBuilder nameFileSonnet = new StringBuilder();
-        nameFileSonnet.append(sonnet.getAuthor().
-
-                        getFirstName()).
-
-                append("_")
-                        .
-
-                append(sonnet.getAuthor().
-
-                        getLastName()).
-
-                append("_")
-                        .
-
-                append(sonnet.getTitle()).
-
-                append(".txt");
-
-        Path path = Paths.get(nameFileSonnet.toString());
-        try {
-            Files.writeString(path, sonnetText, StandardCharsets.UTF_8);
-        } catch (
-                IOException e) {
-            throw new IOException(e.getMessage());
-        }
+return sonnet;
+//        Files.writeString(getPath(sonnet), getText(sonnet), StandardCharsets.UTF_8);
     }
+//
+//    private static Path getPath(Sonnet sonnet) {
+//        String nameFileSonnet = sonnet.getAuthor().getFirstName() + "_" +
+//                sonnet.getAuthor().getLastName() + "_" +
+//                sonnet.getTitle() + ".txt";
+//
+//        return Paths.get(nameFileSonnet);
+//    }
+//
+//    private static String getText(Sonnet sonnet) {
+//        StringBuilder sonnetText = new StringBuilder();
+//        for (String line : sonnet.getLines()) {
+//            sonnetText.append(line).append("\n");
+//        }
+//        return sonnetText.toString();
+//    }
 }

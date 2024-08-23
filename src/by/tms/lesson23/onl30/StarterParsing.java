@@ -1,4 +1,4 @@
-package by.tms.lesson23.onl30.parcers;
+package by.tms.lesson23.onl30;
 
 import by.tms.lesson23.onl30.parcers.model.Sonnet;
 import org.xml.sax.SAXException;
